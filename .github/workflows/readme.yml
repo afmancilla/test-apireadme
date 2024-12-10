@@ -1,0 +1,23 @@
+name: Trigger ApiReadme Action
+
+on:
+  push:
+    paths:
+      - '/api/contrato.yaml'  # Especifica la ruta del archivo que deseas monitorear
+      - '/docs/CHANGELOG.md'
+
+jobs:
+  trigger-widdershins:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Trigger ApiReadme Action
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: afmancilla/apireadme  # Reemplaza con el usuario y nombre del repositorio destino
+        event-type: readme-update
+        client-payload: '{"repository": "${{ github.repository }}", "ref": "${{ github.ref }}"}'

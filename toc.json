@@ -1,0 +1,28 @@
+{
+    "collapseTableOfContents": false,
+    "items": [
+      {
+        "type": "divider",
+        "title": "DOCUMENTACIÓN"
+      },
+      {
+        "type": "item",
+        "title": "Readme",
+        "uri": "/docs/README.md"
+      },
+      {
+        "type": "item",
+        "title": "Link portal apis",
+        "uri": "https://www.portal.com/"
+      },
+      {
+        "type": "divider",
+        "title": "API"
+      },
+      {
+        "type": "item",
+        "title": "Contrato",
+        "uri": "/api/contrato.yaml"
+      }
+    ]
+  }

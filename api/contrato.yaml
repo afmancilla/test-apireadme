@@ -1,0 +1,935 @@
+openapi: 3.0.0
+info:
+  title: API UX NTLC Contract Account Overview V2
+  description: 'Esta API permite solicitar la generacion de los archivos de exportacion de las cuentas, de todas las empresas de un contrato, en Saldos y Movimientos, OB.'
+  version: 3.0.0
+externalDocs:
+  description: Para más información.
+  url: 'https://confluence.com.pe/pages/viewpage.action?pageId=554759484'
+servers:
+  - url: /channel/ntlc/v2
+paths:
+  /companies:
+    get:
+      tags:
+        - Company
+      summary: Obtiene la lista de empresas de un contrato.
+      description: |-
+        ### Acerca de la funcionalidad expuesta 
+
+        El servicio brinda la lista con la información de las empresas que puede ver un usuario.
+
+        ### Data de Prueba
+        No aplica.
+
+        ### Precondiciones para el consumo de esta versión de la API
+        No aplica.
+
+        ### Path Parameters
+        No aplica.
+
+        ### Variantes válidas del Payload (Cuerpo del mesaje)
+        No aplica.
+
+        ### Usos válidos de Query Parameters
+        No aplica.
+
+        ### Variantes validas del Payload (Cuerpo del mensaje)
+        No aplica.
+
+        ### Lista de Valores usadas en esta versión de la API
+        No aplica.
+
+        ### Códigos de error usados en esta versión de la API
+
+        | Código | HTTP Status | Descripción |
+        |--------|-------------|-------------|
+        | TL0002 | 409 | Ocurrió un error al validar las reglas de negocio. |
+        | TL0003 | 400 | Los datos proporcionados no son validos. |
+        | TL0004 | 500 | Ocurrió un error interno en el servicio. |
+        | TL0009 | 503 | Ocurrio un error intentando invocar servicios externos.
+        | TL0011 | 401 | No esta autorizado correctamente para ejecutar esta operacion. |
+      operationId: listCompanies
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de Authorización
+          required: true
+          schema:
+            type: string
+            example: Bearer 363536363jjxnj63633611
+        - name: Request-ID
+          in: header
+          description: Este campo es un valor estandar ya existente y sera usado como identificador.
+          required: true
+          schema:
+            maxLength: 36
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+        - name: X-AUTH-TOKEN
+          in: header
+          description: Identificador de sesion de usuario.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 40
+            minLength: 5
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: Se obtuvo la lista de compañias correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyListResponse'
+        '204':
+          description: La operación no devolvió una respuesta.
+        '400':
+          description: Los datos proporcionados no son validos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0003
+                description: Los datos proporcionados no son validos.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0003
+                    component: Channel Contract Account Overview
+                    description: Los datos proporcionados no son validos.
+        '401':
+          description: No esta autorizado correctamente para ejecutar esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0011
+                description: No esta autorizado correctamente para ejecutar esta operación.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0011
+                    component: Channel Contract Account Overview
+                    description: No esta autorizado correctamente para ejecutar esta operación.
+        '409':
+          description: Ocurrió un error al validar las reglas de negocio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0002
+                description: Ocurrió un error al validar las reglas de negocio.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0002
+                    component: Channel Contract Account Overview
+                    description: Ocurrió un error al validar las reglas de negocio.
+        '500':
+          description: Ocurrió un error interno en el servicio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0004
+                description: Ocurrió un error interno en el servicio.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0004
+                    component: Channel Contract Account Overview
+                    description: Ocurrió un error interno en el servicio.
+        '503':
+          description: Ocurrio un error intentando invocar servicios externos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0009
+                description: Ocurrio un error intentando invocar servicios externos.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0009
+                    component: Channel Contract Account Overview
+                    description: Ocurrio un error intentando invocar servicios externos.
+      x-atlas-header:
+        $ref: '#/components/schemas/ContractAccountOverviewHeaders'
+  /accounts:
+    get:
+      tags:
+        - Account
+      summary: Obtiene una lista de cuentas de una compañia.
+      description: |-
+        ### Acerca de la funcionalidad expuesta
+
+        El servicio brinda las cuentas de la compañia seleccionada.
+
+        ### Data de Prueba
+        No aplica.
+
+        ### Precondiciones para el consumo de esta versión de la API
+        No aplica.
+
+        ### Path Parameters
+        No aplica.
+
+        ### Variantes válidas del Payload (Cuerpo del mesaje)
+        No aplica.
+
+        ### Usos válidos de Query Parameters
+        No aplica.
+
+        ### Variantes validas del Payload (Cuerpo del mensaje)
+        No aplica.
+
+        ### Lista de Valores usadas en esta versión de la API
+        No aplica.
+
+        ### Códigos de error usados en esta versión de la API
+
+        | Código | HTTP Status | Descripción |
+        |--------|-------------|-------------|
+        | TL0002 | 409 | Ocurrió un error al validar las reglas de negocio. |
+        | TL0003 | 400 | Los datos proporcionados no son validos. |
+        | TL0004 | 500 | Ocurrió un error interno en el servicio. |
+        | TL0009 | 503 | Ocurrio un error intentando invocar servicios externos.
+        | TL0011 | 401 | No esta autorizado correctamente para ejecutar esta operacion. |
+      operationId: listAccounts
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de Authorización
+          required: true
+          schema:
+            type: string
+            example: Bearer 363536363jjxnj63633611
+        - name: Request-ID
+          in: header
+          description: Este campo es un valor estandar ya existente y sera usado como identificador.
+          required: true
+          schema:
+            maxLength: 36
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+        - name: X-AUTH-TOKEN
+          in: header
+          description: Identificador de sesion de usuario.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 40
+            minLength: 5
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+        - name: documentType
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            maxLength: 1
+            minLength: 1
+            pattern: '^[1-7A-D]+$'
+            type: string
+            description: Tipo de documento
+            example: '1'
+        - name: documentValue
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            maxLength: 12
+            minLength: 8
+            pattern: '^[a-zA-Z0-9]+$'
+            type: string
+            description: Número de documento
+            nullable: false
+            example: '201003123463'
+        - name: sort
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            description: Campo por el que se ordenar&aacute;
+            example: transactionNumber
+        - name: order
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            pattern: ^(ASC|DESC)$
+            type: string
+            description: Orden en el que ordenar&aacute;
+            example: ASC
+      responses:
+        '200':
+          description: Se obtuvo la lista de las cuentas correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Accounts'
+        '204':
+          description: La operación no devolvió una respuesta.
+        '400':
+          description: Los datos proporcionados no son validos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0003
+                description: Los datos proporcionados no son validos.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0003
+                    component: Channel Contract Account Overview
+                    description: Los datos proporcionados no son validos.
+        '401':
+          description: No esta autorizado correctamente para ejecutar esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0011
+                description: No esta autorizado correctamente para ejecutar esta operación.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0011
+                    component: Channel Contract Account Overview
+                    description: No esta autorizado correctamente para ejecutar esta operación.
+        '409':
+          description: Ocurrió un error al validar las reglas de negocio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0002
+                description: Ocurrió un error al validar las reglas de negocio.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0002
+                    component: Channel Contract Account Overview
+                    description: Ocurrió un error al validar las reglas de negocio.
+        '500':
+          description: Ocurrió un error interno en el servicio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0004
+                description: Ocurrió un error interno en el servicio.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0004
+                    component: Channel Contract Account Overview
+                    description: Ocurrió un error interno en el servicio.
+        '503':
+          description: Ocurrio un error intentando invocar servicios externos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0009
+                description: Ocurrio un error intentando invocar servicios externos.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0009
+                    component: Channel Contract Account Overview
+                    description: Ocurrio un error intentando invocar servicios externos.
+      x-atlas-header:
+        $ref: '#/components/schemas/ContractAccountOverviewHeaders'
+  /company-accounts:
+    get:
+      tags:
+        - Company
+      summary: Obtiene una lista de compañias con sus cuentas.
+      description: |-
+        ### Acerca de la funcionalidad expuesta
+
+        El servicio brinda las cuentas de las compañias seleccionadas para realizar la impresion.
+
+        ### Data de Prueba
+        No aplica.
+
+        ### Precondiciones para el consumo de esta versión de la API
+        No aplica.
+
+        ### Path Parameters
+        No aplica.
+
+        ### Variantes válidas del Payload (Cuerpo del mesaje)
+        No aplica.
+
+        ### Usos válidos de Query Parameters
+        No aplica.
+
+        ### Variantes validas del Payload (Cuerpo del mensaje)
+        No aplica.
+
+        ### Lista de Valores usadas en esta versión de la API
+        No aplica.
+
+        ### Códigos de error usados en esta versión de la API
+
+        | Código | HTTP Status | Descripción |
+        |--------|-------------|-------------|
+        | TL0002 | 409 | Ocurrió un error al validar las reglas de negocio. |
+        | TL0003 | 400 | Los datos proporcionados no son validos. |
+        | TL0004 | 500 | Ocurrió un error interno en el servicio. |
+        | TL0009 | 503 | Ocurrio un error intentando invocar servicios externos.
+        | TL0011 | 401 | No esta autorizado correctamente para ejecutar esta operacion. |
+      operationId: listCompanyAccounts
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de Authorización
+          required: true
+          schema:
+            type: string
+            example: Bearer 363536363jjxnj63633611
+        - name: Request-ID
+          in: header
+          description: Este campo es un valor estandar ya existente y sera usado como identificador.
+          required: true
+          schema:
+            maxLength: 36
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+        - name: X-AUTH-TOKEN
+          in: header
+          description: Identificador de sesion de usuario.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 40
+            minLength: 5
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: Se obtuvo la lista de las cuentas correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyWithAccounts'
+        '204':
+          description: La operación no devolvió una respuesta.
+        '400':
+          description: Los datos proporcionados no son validos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0003
+                description: Los datos proporcionados no son validos.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0003
+                    component: Channel Contract Account Overview
+                    description: Los datos proporcionados no son validos.
+        '401':
+          description: No esta autorizado correctamente para ejecutar esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0011
+                description: No esta autorizado correctamente para ejecutar esta operación.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0011
+                    component: Channel Contract Account Overview
+                    description: No esta autorizado correctamente para ejecutar esta operación.
+        '409':
+          description: Ocurrió un error al validar las reglas de negocio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0002
+                description: Ocurrió un error al validar las reglas de negocio.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0002
+                    component: Channel Contract Account Overview
+                    description: Ocurrió un error al validar las reglas de negocio.
+        '500':
+          description: Ocurrió un error interno en el servicio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0004
+                description: Ocurrió un error interno en el servicio.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0004
+                    component: Channel Contract Account Overview
+                    description: Ocurrió un error interno en el servicio.
+        '503':
+          description: Ocurrio un error intentando invocar servicios externos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0009
+                description: Ocurrio un error intentando invocar servicios externos.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0009
+                    component: Channel Contract Account Overview
+                    description: Ocurrio un error intentando invocar servicios externos.
+      x-atlas-header:
+        $ref: '#/components/schemas/ContractAccountOverviewHeaders'
+  /file-orders/company-accounts:
+    post:
+      tags:
+        - File order
+      summary: Crea una solicitud para generar un archivo con el listado de cuentas de las compañias seleccionas.
+      description: |-
+        ### Acerca de la funcionalidad expuesta
+
+        El servicio crea la solicitud para la exportación de un archivo con un listado de cuentas y sus saldos, de las compañias seleccionadas.
+
+        ### Data de Prueba
+        No aplica.
+
+        ### Precondiciones para el consumo de esta versión de la API
+        No aplica.
+
+        ### Path Parameters
+        No aplica.
+
+        ### Variantes válidas del Payload (Cuerpo del mesaje)
+        No aplica.
+
+        ### Usos válidos de Query Parameters
+        No aplica.
+
+        ### Variantes validas del Payload (Cuerpo del mensaje)
+        No aplica.
+
+        ### Lista de Valores usadas en esta versión de la API
+        No aplica.
+
+        ### Códigos de error usados en esta versión de la API
+
+        | Código | HTTP Status | Descripción |
+        |--------|-------------|-------------|
+        | TL0002 | 409 | Ocurrió un error al validar las reglas de negocio. |
+        | TL0003 | 400 | Los datos proporcionados no son validos. |
+        | TL0004 | 500 | Ocurrió un error interno en el servicio. |
+        | TL0009 | 503 | Ocurrio un error intentando invocar servicios externos.
+        | TL0011 | 401 | No esta autorizado correctamente para ejecutar esta operacion. |
+      operationId: addFileOrder
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de Authorización
+          required: true
+          schema:
+            type: string
+            example: Bearer 363536363jjxnj63633611
+        - name: Request-ID
+          in: header
+          description: Este campo es un valor estandar ya existente y sera usado como identificador.
+          required: true
+          schema:
+            maxLength: 36
+            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+        - name: X-AUTH-TOKEN
+          in: header
+          description: Identificador de sesion de usuario.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 40
+            minLength: 5
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractAccountExportRequest'
+      responses:
+        '200':
+          description: Se gener&oacute; correctamente la solicitud.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAccountExportResponse'
+        '204':
+          description: La operación no devolvió una respuesta.
+        '400':
+          description: Los datos proporcionados no son validos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0003
+                description: Los datos proporcionados no son validos.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0003
+                    component: Channel File Order Management
+                    description: Los datos proporcionados no son validos.
+        '401':
+          description: No esta autorizado correctamente para ejecutar esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0011
+                description: No esta autorizado correctamente para ejecutar esta operación.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0011
+                    component: Channel File Order Management
+                    description: No esta autorizado correctamente para ejecutar esta operación.
+        '409':
+          description: Ocurrió un error al validar las reglas de negocio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0002
+                description: Ocurrió un error al validar las reglas de negocio.
+                errorType: FUNCTIONAL
+                exceptionDetail:
+                  - code: TL0002
+                    component: Channel File Order Management
+                    description: Ocurrió un error al validar las reglas de negocio.
+        '500':
+          description: Ocurrió un error interno en el servicio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0004
+                description: Ocurrió un error interno en el servicio.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0004
+                    component: Channel File Order Management
+                    description: Ocurrió un error interno en el servicio.
+        '503':
+          description: Ocurrio un error intentando invocar servicios externos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiException'
+              example:
+                code: TL0009
+                description: Ocurrio un error intentando invocar servicios externos.
+                errorType: TECHNICAL
+                exceptionDetail:
+                  - code: TL0009
+                    component: Channel File Order Management
+                    description: Ocurrio un error intentando invocar servicios externos.
+      x-atlas-header:
+        $ref: '#/components/schemas/ContractAccountOverviewHeaders'
+components:
+  schemas:
+    CompanyWithAccounts:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/Company'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Accounts'
+    Company:
+      type: object
+      properties:
+        documentValue:
+          maxLength: 12
+          minLength: 8
+          pattern: '^[a-zA-Z0-9]+$'
+          type: string
+          example: '20131257750'
+        documentType:
+          maxLength: 1
+          minLength: 1
+          pattern: '^[1-7A-D]+$'
+          type: string
+          example: '6'
+        description:
+          type: string
+          example: COSAPI SAC
+        isPrincipal:
+          type: boolean
+          example: true
+      description: Empresa
+    ContractAccountExportRequest:
+      title: ContractAccountExportRequest
+      required:
+        - columnsTable
+        - fileFormat
+      type: object
+      properties:
+        companyListFilter:
+          $ref: '#/components/schemas/companyListFilter'
+        columnsTable:
+          type: array
+          example:
+            - account
+            - status
+            - accountType
+            - currency
+            - availableBalance
+            - countableBalance
+            - balanceNotAvailable
+          items:
+            type: string
+        fileFormat:
+          pattern: ^(pdf|txt|csv|xlsx)$
+          type: string
+          description: Formato para exportar
+          example: pdf
+        txtSeparator:
+          pattern: '^(,|;)$'
+          type: string
+          description: Separador de columnas para el formato txt
+          example: ;
+    companyListFilter:
+      title: companyListFilter
+      type: array
+      items:
+        $ref: '#/components/schemas/companyFilter'
+    companyFilter:
+      title: companyFilter
+      type: object
+      properties:
+        documentType:
+          maxLength: 1
+          minLength: 1
+          pattern: '^[1-7A-D]+$'
+          type: string
+          example: '6'
+        documentValue:
+          maxLength: 12
+          minLength: 8
+          pattern: '^[a-zA-Z0-9]+$'
+          type: string
+          example: '20307500630'
+        accountListFilter:
+          type: array
+          example:
+            - fec5446f2b5e9d8b474f4a22cff649c25453d95f1a9915afb3b22eb2f83ee4f0
+            - b525b195650cccb3a4a4e04b1dfc98965f16a5c6e455d3d24052f48812672a28
+          items:
+            type: string
+    ContractAccountExportResponse:
+      type: object
+      properties:
+        fileRequestNumber:
+          type: string
+          example: '1232'
+        fileName:
+          type: string
+          example: archivo_todas_las_empresas
+      description: Objeto con la informacion de la solicitud de exportacion
+    ContractAccountOverviewHeaders:
+      type: object
+    Accounts:
+      required:
+        - accountId
+        - aliasAccount
+        - amountAccountant
+        - amountAvailable
+        - amountUnavailable
+        - currencyCode
+        - currencyDescription
+        - currencySymbol
+        - familyCode
+        - familyDescription
+        - formattedAccountNumber
+        - statusCode
+        - statusDescription
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: N&uacute;mero de cuenta.
+          example: '1931070017161004'
+        formattedAccountNumber:
+          type: string
+          description: Formato de la cuenta.
+          example: 193-107001716-1-61
+        aliasAccount:
+          type: string
+          description: Alias de una cuenta.
+          example: CUENTA PERU 2022
+        statusCode:
+          type: string
+          description: C&oacute;digo de status.
+          example: a
+        statusDescription:
+          type: string
+          description: Descripci&oacute;n de status.
+          example: Activa
+        familyCode:
+          type: string
+          description: C&oacute;digo de family.
+          example: c
+        familyDescription:
+          type: string
+          description: Descripci&oacute;n de family.
+          example: Corriente
+        currencyCode:
+          type: string
+          description: C&oacute;digo tipo de moneda.
+          example: USD
+        currencyDescription:
+          type: string
+          description: Descripci&oacute;n tipo de moneda.
+          example: Dolares
+        currencySymbol:
+          type: string
+          description: Simbolo tipo de moneda.
+          example: $
+        amountAvailable:
+          type: number
+          description: Saldo Disponible.
+          example: 10
+        amountUnavailable:
+          type: number
+          description: Saldo no Disponible.
+          example: 0
+        amountAccountant:
+          type: number
+          description: Saldo Contado.
+          example: 10
+        hashAccountId:
+          type: string
+          description: N&uacute;mero de cuenta encriptada.
+          example: fec5446f2b5e9d8b474f4a22cff649c25453d95f1a9915afb3b22eb2f83ee4f0
+      description: Listado de cuentas.
+    CompanyListResponse:
+      type: object
+      properties:
+        documentValue:
+          maxLength: 12
+          minLength: 8
+          pattern: '^[a-zA-Z0-9]+$'
+          type: string
+          description: Valor del documento
+          example: '20461896344'
+        documentType:
+          maxLength: 1
+          minLength: 1
+          pattern: '^[1-7A-D]+$'
+          type: string
+          description: Tipo de documento
+          example: '1'
+        description:
+          type: string
+          description: Nombre de empresa o raz&oacute;n social
+          example: '121321'
+        isPrincipal:
+          type: boolean
+          description: Identificador de empresa principal
+          example: true
+        accountsQuantity:
+          type: integer
+          description: Numero de cuentas de la empresa
+          format: int32
+          example: 12
+        creditCardsQuantity:
+          type: integer
+          description: Numero de tarjetas de credito de la empresa
+          format: int32
+          example: 4
+    ApiException:
+      title: ApiException
+      type: object
+      properties:
+        code:
+          type: string
+          description: Codigo de error de Sistema
+          example: TL0001
+        description:
+          type: string
+          description: Descripcion del error de Sistema
+          example: Error al llamar al servicio
+        errorType:
+          type: string
+          description: Tipo de Error de Sistema
+          example: TECHNICAL
+        exceptionDetails:
+          type: array
+          description: Lista de detalles del error
+          items:
+            $ref: '#/components/schemas/ApiExceptionDetail'
+        properties:
+          type: object
+          properties: {}
+          description: Lista de propiedades especiales.
+      description: Datos del error de sistema.
+    ApiExceptionDetail:
+      title: ApiExceptionDetail
+      type: object
+      properties:
+        code:
+          type: string
+          description: Codigo de error del Detalle/Proveedor
+          example: MB0008
+        component:
+          type: string
+          description: Nombre del componente de falla
+          example: MB.CardInqV2
+        description:
+          type: string
+          description: Descripcion del Detalle
+          example: Codigo invalido para el canal
+      description: Datos del error técnico.
+  parameters:
+    X-AUTH-TOKEN:
+      name: X-AUTH-TOKEN
+      in: header
+      description: Identificador de sesion de usuario.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        maxLength: 40
+        minLength: 5
+        type: string
+        example: 550e8400-e29b-41d4-a716-446655440000
