@@ -3,8 +3,8 @@ name: Trigger ApiReadme Action
 on:
   push:
     paths:
-      - '/api/contrato.yaml'  # Especifica la ruta del archivo que deseas monitorear
-      - '/docs/CHANGELOG.md'
+      - 'api/contrato.yaml'  # Especifica la ruta del archivo que deseas monitorear
+      - 'docs/CHANGELOG.md'
 
 jobs:
   trigger-widdershins:
