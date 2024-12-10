@@ -7,7 +7,7 @@ on:
       - 'docs/CHANGELOG.md'
 
 jobs:
-  trigger-widdershins:
+  trigger-readme:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
     - name: Trigger ApiReadme Action
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} 
         repository: afmancilla/apireadme  # Reemplaza con el usuario y nombre del repositorio destino
         event-type: readme-update
         client-payload: '{"repository": "${{ github.repository }}", "ref": "${{ github.ref }}"}'
