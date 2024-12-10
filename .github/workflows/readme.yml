@@ -20,4 +20,4 @@ jobs:
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} 
         repository: afmancilla/apireadme  # Reemplaza con el usuario y nombre del repositorio destino
         event-type: readme-update
-        client-payload: '{"repository": "${{ github.repository }}", "ref": "${{ github.ref }}"}'
+        client-payload: '{"repository": "${{ github.repository }}", "ref": "${{ github.ref }}", "token": "${{ secrets.PERSONAL_ACCESS_TOKEN }}"}'
